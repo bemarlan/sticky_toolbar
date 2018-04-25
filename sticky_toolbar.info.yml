@@ -1,0 +1,13 @@
+name: 'Sticky Toolbar'
+description: 'Allows users to toggle whether the toolbar is sticky.'
+package: Other
+
+type: module
+core: 8.x
+
+php: 5.6
+
+hidden: false
+
+dependencies:
+  - drupal:toolbar
