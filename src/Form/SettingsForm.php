@@ -41,21 +41,21 @@ class SettingsForm extends FormBase {
 	    );
 
 		return $form;
+
+		// @todo: Find more elegant way to create a single CurrentUser object for both functions.
 	}
 
 	public function submitForm(array &$form, FormStateInterface $form_state) {
 		$sticky = $form_state->getValue('is_sticky');
 		$currentUser = new CurrentUser();
-		$saved = $currentUser->setSetting($sticky);
+		if (is_bool($sticky)) {
+			$currentUser->setSetting($sticky);
+		}
 
 		$form_state->setRedirect('sticky_toolbar.admin_settings');
-		if ($saved) {
-			$message = 'Your toolbar settings have been updated.';
-		}
-		else {
-			$message = 'Something went wrong. Please try again.';
-		}
-		
+		$message = 'Your toolbar settings have been updated.';
 		drupal_set_message($message);
+
+		// @todo: Add error handling.
 	}
 }
