@@ -47,7 +47,7 @@ class SettingsForm extends FormBase {
 	public function submitForm(array &$form, FormStateInterface $form_state) {
 		$sticky = $form_state->getValue('is_sticky');
 		$currentUser = new StickySetting();
-		if (is_bool($sticky)) {
+		if (is_integer($sticky)) {
 			$currentUser->setSetting($sticky);
 		}
 
