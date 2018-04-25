@@ -9,7 +9,7 @@ namespace Drupal\sticky_toolbar\Form;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Form\FormState;
-use Drupal\sticky_toolbar\Controller\CurrentUser;
+use Drupal\sticky_toolbar\Controller\StickySetting;
 
 class SettingsForm extends FormBase {
 	/**
@@ -24,7 +24,7 @@ class SettingsForm extends FormBase {
 	 */
 	public function buildForm(array $form, FormStateInterface $form_state) {
 		// get user's existing settings
-		$currentUser = new CurrentUser();
+		$currentUser = new StickySetting();
 		$setting = $currentUser->getSetting();
 
 		// fields available on admin settings screen
@@ -41,12 +41,12 @@ class SettingsForm extends FormBase {
 
 		return $form;
 
-		// @todo: Find more elegant way to create a single CurrentUser object for both functions.
+		// @todo: Find more elegant way to create a single StickySetting object for both functions.
 	}
 
 	public function submitForm(array &$form, FormStateInterface $form_state) {
 		$sticky = $form_state->getValue('is_sticky');
-		$currentUser = new CurrentUser();
+		$currentUser = new StickySetting();
 		if (is_bool($sticky)) {
 			$currentUser->setSetting($sticky);
 		}
