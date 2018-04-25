@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- * Contains \Drupal\sticky_toolbar\Controller\CurrentUser.
+ * Contains \Drupal\sticky_toolbar\Controller\CurrentUser
  */
 namespace Drupal\sticky_toolbar\Controller;
 
@@ -32,14 +32,15 @@ class CurrentUser extends ControllerBase {
     public function getSetting() {
         /** @var UserDataInterface $userData */
         $userData = \Drupal::service('user.data');
+        $setting = FALSE;
 
         if ($userData->get('sticky_toolbar', $this->user, 'sticky') !== null) {
             $setting = $userData->get('sticky_toolbar', $this->user, 'sticky');
         }
-        else {
-            $setting = FALSE;
-        }
+
         return $setting;
+
+        // @todo: Find more elegant way to create a single $userData variable for both Setting functions.
     }
 
     /**
@@ -51,7 +52,8 @@ class CurrentUser extends ControllerBase {
         if ($userData->get('sticky_toolbar', $this->user, 'sticky') !== $setting) {
             $userData->set('sticky_toolbar', $this->user, 'sticky', $setting);
         }
-        return TRUE;
+
+        // @todo: Make this accept many data types and add param for setting name.
     }
 
 }

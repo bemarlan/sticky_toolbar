@@ -9,7 +9,6 @@ namespace Drupal\sticky_toolbar\Form;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Form\FormState;
-use \Drupal\Component\Utility\NestedArray;
 use Drupal\sticky_toolbar\Controller\CurrentUser;
 
 class SettingsForm extends FormBase {
@@ -20,7 +19,7 @@ class SettingsForm extends FormBase {
 		return 'sticky_toolbar_settings_form';
 	}
 
-  	/**
+  /**
 	 * {@inheridoc}
 	 */
 	public function buildForm(array $form, FormStateInterface $form_state) {
