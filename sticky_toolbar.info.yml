@@ -1,7 +1,7 @@
 name: 'Sticky Toolbar'
 description: 'Allows users to toggle whether the core toolbar is sticky.'
 package: Other
-version: 8.x-1.0-alpha1
+version: 8.x-1.0
 
 type: module
 core: 8.x
