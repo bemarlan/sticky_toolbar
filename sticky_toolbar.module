@@ -1,18 +1,18 @@
 <?php
-
 /**
  * @file
- * Administration toolbar for quick access to top level administration items.
  */
-
 use Drupal\sticky_toolbar\Controller\StickySettingController;
 
 /**
- * Implements hook_preprocess_HOOK().
+ * Implements hook_preprocess_page().
  */
 function sticky_toolbar_preprocess_page(array &$variables) {
   $setting = new StickySettingController();
   if ($setting->getSetting() == 0) {
     $variables['#attached']['library'][] = 'sticky_toolbar/sticky_toolbar_reset';
   }
+  // Destroy object for memory.
+  $setting = null;
+  unset($seting);
 }

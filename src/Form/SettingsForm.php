@@ -3,7 +3,6 @@
  * @file
  * Contains \Drupal\sticky_toolbar\src\Form\SettingsForm
  */
-
 namespace Drupal\sticky_toolbar\Form;
 
 use Drupal\Core\Form\FormBase;
@@ -23,11 +22,11 @@ class SettingsForm extends FormBase {
 	 * {@inheridoc}
 	 */
 	public function buildForm(array $form, FormStateInterface $form_state) {
-		// get user's existing settings
+		// Get user's existing setting.
 		$currentUser = new StickySettingController();
 		$setting = $currentUser->getSetting();
 
-		// fields available on admin settings screen
+		// Fields available on admin settings screen.
 		$form['is_sticky'] = array(
 			'#type' => 'checkbox',
 			'#title' => 'Make toolbar sticky',
@@ -38,6 +37,10 @@ class SettingsForm extends FormBase {
 	      '#name' => 'submit_button',
 	      '#value' => t('Save'),
 	    );
+
+		// Destroy object for memory.
+  		$currentUser = null;
+  		unset($currentUser);
 
 		return $form;
 		// @todo: Find more elegant way to create a single StickySettingController object for both functions.
@@ -52,6 +55,10 @@ class SettingsForm extends FormBase {
 		if (is_integer($sticky)) {
 			$currentUser->setSetting($sticky);
 		}
+
+		// Destroy object for memory.
+  		$currentUser = null;
+  		unset($currentUser);
 
 		$form_state->setRedirect('sticky_toolbar.admin_settings');
 		$message = 'Your toolbar settings have been updated.';

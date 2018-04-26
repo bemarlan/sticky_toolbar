@@ -54,7 +54,13 @@ class StickySettingController extends ControllerBase {
       $userData->set('sticky_toolbar', $this->user, 'sticky', $setting);
     }
 
-    // reset cache each time the user updates their setting
+    // Flush asset file caches.
+    \Drupal::service('asset.css.collection_optimizer')
+      ->deleteAll();
+    \Drupal::service('asset.js.collection_optimizer')
+      ->deleteAll();
+    _drupal_flush_css_js();
+    // Reset cache each time the user updates their setting.
     $this->sticky_toolbar_set_cache($setting);
     // @todo: Make this accept many data types and add param for setting name.
   }
