@@ -40,7 +40,6 @@ class SettingsForm extends FormBase {
 	    );
 
 		return $form;
-
 		// @todo: Find more elegant way to create a single StickySettingController object for both functions.
 	}
 
@@ -57,7 +56,6 @@ class SettingsForm extends FormBase {
 		$form_state->setRedirect('sticky_toolbar.admin_settings');
 		$message = 'Your toolbar settings have been updated.';
 		drupal_set_message($message);
-
 		// @todo: Add error handling.
 	}
 }

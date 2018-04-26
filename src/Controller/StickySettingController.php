@@ -12,23 +12,11 @@ class StickySettingController extends ControllerBase {
   protected $user;
 
   /**
-   * Constructs a PanelizerPanelsIPEController.
-   *
-   * @param \Drupal\sticky_toolbar\LoggedInUserService $user
-   *   The logged in user service.
+   * {@inheritdoc}
    */
   public function __construct(){
     $this->user = \Drupal::currentUser()->id();
   }
-
-  /**
-   * {@inheritdoc}
-   */
-  // public static function create(ContainerInterface $container) {
-  //   return new static(
-  //     $container->get('sticky_toolbar.logged_in_user');
-  //   );
-  // }
 
   /**
    * {@inheritdoc}
@@ -44,14 +32,13 @@ class StickySettingController extends ControllerBase {
   public function getSetting() {
     /** @var UserDataInterface $userData */
     $userData = \Drupal::service('user.data');
-    $setting = 0;
+    $setting = 1;
 
     if ($userData->get('sticky_toolbar', $this->user, 'sticky') !== null) {
       $setting = $userData->get('sticky_toolbar', $this->user, 'sticky');
     }
 
     return $setting;
-
     // @todo: Find more elegant way to create a single $userData variable for both Setting functions.
   }
 
@@ -67,7 +54,22 @@ class StickySettingController extends ControllerBase {
       $userData->set('sticky_toolbar', $this->user, 'sticky', $setting);
     }
 
+    // reset cache each time the user updates their setting
+    $this->sticky_toolbar_set_cache($setting);
     // @todo: Make this accept many data types and add param for setting name.
+  }
+
+  /*
+   * Wrapper for cache setting.
+   * Set cache each time the user updates their setting.
+   * @param: key - an arbitrary name given to the cached data
+   *         setting - the user's sticky setting 
+   * @return: the data that was cached
+   */
+  function sticky_toolbar_set_cache($setting, $key = 'setting') {
+    $data = $setting;
+    \Drupal::cache()->set($key, $data);
+    return $data;
   }
 
 }
