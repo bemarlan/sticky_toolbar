@@ -18,3 +18,7 @@
 //   $variables['attributes'] = new Attribute($variables['attributes']);
 //   $variables['attributes']->addClass('test')->removeClass(['toolbar-tray-open', 'toolbar-fixed']);
 // }
+
+function sticky_toolbar_preprocess_page(&$variables) {
+  $variables['#attached']['library'][] =  'sticky_toolbar/sticky_toolbar_reset';
+}
