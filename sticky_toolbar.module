@@ -14,5 +14,5 @@ function sticky_toolbar_preprocess_page(array &$variables) {
   }
   // Destroy object for memory.
   $setting = null;
-  unset($seting);
+  unset($setting);
 }
