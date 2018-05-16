@@ -47,4 +47,4 @@ MAINTAINERS
 -----------
 
 Current maintainers:
- * Beverly Lanning (bemarlan) - https://www.drupal.org/user/3513747/message-follow
+ * Beverly Lanning (bemarlan) - https://www.drupal.org/u/bemarlan
