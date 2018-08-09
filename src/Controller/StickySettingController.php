@@ -83,3 +83,4 @@ class StickySettingController extends ControllerBase {
     \Drupal::service('asset.js.collection_optimizer')->deleteAll();
     _drupal_flush_css_js();
   }
+}
