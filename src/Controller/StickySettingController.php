@@ -1,14 +1,8 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\sticky_toolbar\Controller\StickySettingController
- */
-
 namespace Drupal\sticky_toolbar\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
-use Drupal\Core\Cache\CacheBackendInterface;
 
 /**
  * Sets and returns responses for Sticky Toolbar settings.
@@ -17,10 +11,10 @@ class StickySettingController extends ControllerBase {
   /**
    * Gets the authenticated user's ID.
    * 
-   * @return integer
+   * @return int
    *   The Drupal user's ID.
    */
-  private function getUserId() {
+  private function get_user_id() {
     $userID = \Drupal::currentUser()->id();
     return $userID;
   }
@@ -28,12 +22,12 @@ class StickySettingController extends ControllerBase {
   /**
    * Gets the sticky setting from user's data.
    * 
-   * @return integer
+   * @return int
    *   The integer determining the sticky setting.
    */
-  private function getStickySettingData() {
+  private function get_sticky_setting_data() {
     $userData = \Drupal::service('user.data');
-    $setting = $userData->get('sticky_toolbar', $this->getUserId(), 'sticky');
+    $setting = $userData->get('sticky_toolbar', $this->get_user_id(), 'sticky');
 
     return $setting;
   }
@@ -41,26 +35,26 @@ class StickySettingController extends ControllerBase {
   /**
    * Sets the user's data sticky setting.
    *  
-   * @param integer $setting
+   * @param int $setting
    *   The integer determining the sticky setting.
    */
-  private function setStickySettingData($setting) {
+  private function set_sticky_setting_data($setting) {
     $userData = \Drupal::service('user.data');
 
-    $userData->set('sticky_toolbar', $this->getUserId(), 'sticky', $setting);
+    $userData->set('sticky_toolbar', $this->get_user_id(), 'sticky', $setting);
   }
 
   /**
    * Gets the sticky setting.
    * 
-   * @return integer
+   * @return int
    *   The integer determining the sticky setting.
    */
-  public function getSetting() {
-    $userSettingData = $this->getStickySettingData();
+  public function get_setting() {
+    $userSettingData = $this->get_sticky_setting_data();
     $setting = 1;
 
-    if ($userSettingData !== null) {
+    if ($userSettingData !== NULL) {
       $setting = $userSettingData;
     }
 
@@ -69,14 +63,14 @@ class StickySettingController extends ControllerBase {
 
   /**
    * Sets the sticky setting.
-   *  
-   * @param integer $setting
+   * 
+   * @param int $setting
    *   The integer determining the sticky setting.
    * 
    * @todo Make this accept many data types and add param for setting name.
    */
-  public function setSetting($setting) {
-    $this->setStickySettingData($setting);
+  public function set_setting($setting) {
+    $this->set_sticky_setting_data($setting);
 
     // Flush asset file caches.
     \Drupal::service('asset.css.collection_optimizer')->deleteAll();

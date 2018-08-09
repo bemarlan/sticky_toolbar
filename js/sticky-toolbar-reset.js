@@ -2,7 +2,7 @@
  * @file
  * Javascript for the Sticky Toolbar reset.
  */
- 
+
 (function ($, Drupal) {
 
   'use strict';

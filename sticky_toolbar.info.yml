@@ -4,7 +4,6 @@ description: 'Allows users to toggle whether the core toolbar is sticky.'
 core: 8.x
 package: Other
 configure: sticky_toolbar.admin_settings
-version: 8.x-1.1
 
 libraries-override:
   toolbar/toolbar:
