@@ -23,7 +23,7 @@ function sticky_toolbar_help($route_name, RouteMatchInterface $route_match) {
  */
 function sticky_toolbar_page_attachments(array &$page) {
   $settings = new StickySettingController();
-  $sticky = $settings->get_setting();
+  $sticky = $settings->setSetting();
 
   // Only attach library if user set sticky toggle to false.
   if (!$sticky) {

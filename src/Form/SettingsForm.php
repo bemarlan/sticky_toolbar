@@ -23,7 +23,7 @@ class SettingsForm extends FormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $settings = new StickySettingController();
-    $sticky = $settings->get_setting();
+    $sticky = $settings->getSetting();
 
     $form['is_sticky'] = [
       '#type' => 'checkbox',
@@ -41,7 +41,7 @@ class SettingsForm extends FormBase {
 
   /**
    * {@inheritdoc}
-   * 
+   *
    * @todo Add error handling.
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
@@ -49,12 +49,12 @@ class SettingsForm extends FormBase {
     $settings = new StickySettingController();
 
     if (is_int($sticky)) {
-      $settings->set_setting($sticky);
+      $settings->setSetting($sticky);
     }
 
     $form_state->setRedirect('sticky_toolbar.admin_settings');
     $message = 'Your toolbar settings have been updated.';
     drupal_set_message($message);
   }
-  
+
 }

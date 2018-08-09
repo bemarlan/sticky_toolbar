@@ -13,4 +13,3 @@ libraries-override:
 
 dependencies:
   - drupal:toolbar
-  
