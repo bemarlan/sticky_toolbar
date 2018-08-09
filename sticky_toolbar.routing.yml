@@ -5,3 +5,4 @@ sticky_toolbar.admin_settings:
     _title: 'Sticky Toolbar settings'
   requirements:
     _permission: 'administer sticky_toolbar'
+    

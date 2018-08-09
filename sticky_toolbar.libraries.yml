@@ -5,5 +5,4 @@ sticky_toolbar_reset:
   dependencies:
     - core/jquery
     - core/jquery.once
-    - core/backbone
     - toolbar/toolbar

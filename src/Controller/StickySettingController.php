@@ -1,81 +1,85 @@
 <?php
+
 /**
  * @file
  * Contains \Drupal\sticky_toolbar\Controller\StickySettingController
  */
+
 namespace Drupal\sticky_toolbar\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\Core\Cache\CacheBackendInterface;
 
+/**
+ * Sets and returns responses for Sticky Toolbar settings.
+ */
 class StickySettingController extends ControllerBase {
-  protected $user;
-
   /**
-   * {@inheritdoc}
+   * Gets the authenticated user's ID.
+   * 
+   * @return integer
+   *   The Drupal user's ID.
    */
-  public function __construct(){
-    $this->user = \Drupal::currentUser()->id();
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getUserID() {
-    $userID = $this->user;
+  private function getUserId() {
+    $userID = \Drupal::currentUser()->id();
     return $userID;
   }
 
   /**
-   * {@inheritdoc}
+   * Gets the sticky setting from user's data.
+   * 
+   * @return integer
+   *   The integer determining the sticky setting.
    */
-  public function getSetting() {
-    /** @var UserDataInterface $userData */
+  private function getStickySettingData() {
     $userData = \Drupal::service('user.data');
-    $setting = 1;
-
-    if ($userData->get('sticky_toolbar', $this->user, 'sticky') !== null) {
-      $setting = $userData->get('sticky_toolbar', $this->user, 'sticky');
-    }
+    $setting = $userData->get('sticky_toolbar', $this->getUserId(), 'sticky');
 
     return $setting;
-    // @todo: Find more elegant way to create a single $userData variable for both Setting functions.
   }
 
   /**
+   * Sets the user's data sticky setting.
+   *  
    * @param integer $setting
-   *   The boolean integer determining the sticky setting.
-   * {@inheritdoc}
+   *   The integer determining the sticky setting.
    */
-  public function setSetting($setting) {
-    /** @var UserDataInterface $userData */
+  private function setStickySettingData($setting) {
     $userData = \Drupal::service('user.data');
-    if (($setting <=1 && $setting >= 0) && $this->getSetting() !== $setting) {
-      $userData->set('sticky_toolbar', $this->user, 'sticky', $setting);
+
+    $userData->set('sticky_toolbar', $this->getUserId(), 'sticky', $setting);
+  }
+
+  /**
+   * Gets the sticky setting.
+   * 
+   * @return integer
+   *   The integer determining the sticky setting.
+   */
+  public function getSetting() {
+    $userSettingData = $this->getStickySettingData();
+    $setting = 1;
+
+    if ($userSettingData !== null) {
+      $setting = $userSettingData;
     }
 
-    // Flush asset file caches.
-    \Drupal::service('asset.css.collection_optimizer')
-      ->deleteAll();
-    \Drupal::service('asset.js.collection_optimizer')
-      ->deleteAll();
-    _drupal_flush_css_js();
-    // Reset cache each time the user updates their setting.
-    $this->sticky_toolbar_set_cache($setting);
-    // @todo: Make this accept many data types and add param for setting name.
+    return $setting;
   }
 
-  /*
-   * Wrapper for cache setting.
-   * Set cache each time the user updates their setting.
-   * @param: key - an arbitrary name given to the cached data
-   *         setting - the user's sticky setting 
-   * @return: the data that was cached
+  /**
+   * Sets the sticky setting.
+   *  
+   * @param integer $setting
+   *   The integer determining the sticky setting.
+   * 
+   * @todo Make this accept many data types and add param for setting name.
    */
-  function sticky_toolbar_set_cache($setting, $key = 'setting') {
-    $data = $setting;
-    \Drupal::cache()->set($key, $data);
-    return $data;
-  }
+  public function setSetting($setting) {
+    $this->setStickySettingData($setting);
 
-}
+    // Flush asset file caches.
+    \Drupal::service('asset.css.collection_optimizer')->deleteAll();
+    \Drupal::service('asset.js.collection_optimizer')->deleteAll();
+    _drupal_flush_css_js();
+  }
