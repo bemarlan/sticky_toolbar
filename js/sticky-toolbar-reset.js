@@ -5,7 +5,7 @@
 
 (function ($, Drupal) {
 
-	'use strict';
+  'use strict';
 
   Drupal.behaviors.sticky_toolbar_reset = {
     attach: function () {
