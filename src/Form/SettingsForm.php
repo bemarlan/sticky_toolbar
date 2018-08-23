@@ -5,6 +5,8 @@ namespace Drupal\sticky_toolbar\Form;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Asset\CssCollectionOptimizer;
+use Drupal\Core\Asset\JsCollectionOptimizer;
 use Drupal\user\UserDataInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -14,14 +16,32 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class SettingsForm extends FormBase {
 
   /**
+   * Current user's data.
+   *
    * @var Drupal\user\UserDataInterface
    */
   protected $userData;
 
   /**
+   * Current user.
+   *
    * @var Drupal\Core\Session\AccountInterface
    */
   protected $user;
+
+  /**
+   * Cached css.
+   *
+   * @var Drupal\Core\Asset\CssCollectionOptimizer
+   */
+  protected $cachedCss;
+
+  /**
+   * Cached js.
+   *
+   * @var Drupal\Core\Asset\JsCollectionOptimizer
+   */
+  protected $cachedJs;
 
   /**
    * {@inheritdoc}
@@ -29,7 +49,9 @@ class SettingsForm extends FormBase {
   public static function create(ContainerInterface $container) {
     return new static (
       $container->get('user.data'),
-      $container->get('current_user')
+      $container->get('current_user'),
+      $container->get('asset.css.collection_optimizer'),
+      $container->get('asset.js.collection_optimizer')
     );
   }
 
@@ -37,13 +59,19 @@ class SettingsForm extends FormBase {
    * Constructs the SettingsForm.
    *
    * @param Drupal\user\UserDataInterface $userData
-   *   The user data.
-   *
+   *   User data.
    * @param Drupal\Core\Session\AccountInterface $account
+   *   Current account.
+   * @param Drupal\Core\Asset\CssCollectionOptimizer $cachedCss
+   *   Cached css files.
+   * @param Drupal\Core\Asset\JsCollectionOptimizer $cachedJs
+   *   Cached js files.
    */
-  public function __construct(UserDataInterface $userData, AccountInterface $account) {
+  public function __construct(UserDataInterface $userData, AccountInterface $account, CssCollectionOptimizer $cachedCss, JsCollectionOptimizer $cachedJs) {
     $this->userData = $userData;
     $this->user = $account;
+    $this->cachedCss = $cachedCss;
+    $this->cachedJs = $cachedJs;
   }
 
   /**
@@ -117,8 +145,8 @@ class SettingsForm extends FormBase {
     $this->userData->set('sticky_toolbar', $this->user->id(), 'sticky', $setting);
 
     // Flush asset file caches.
-    \Drupal::service('asset.css.collection_optimizer')->deleteAll();
-    \Drupal::service('asset.js.collection_optimizer')->deleteAll();
+    $this->cachedCss->deleteAll();
+    $this->cachedJs->deleteAll();
     _drupal_flush_css_js();
   }
 
