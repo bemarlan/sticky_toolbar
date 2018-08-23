@@ -6,7 +6,6 @@
  */
 
 use Drupal\Core\Routing\RouteMatchInterface;
-use Drupal\sticky_toolbar\Controller\StickySettingController;
 
 /**
  * Implements hook_help().
@@ -22,8 +21,8 @@ function sticky_toolbar_help($route_name, RouteMatchInterface $route_match) {
  * Implements hook_page_attachments().
  */
 function sticky_toolbar_page_attachments(array &$page) {
-  $settings = new StickySettingController();
-  $sticky = $settings->setSetting();
+  $user = \Drupal::currentUser()->id();
+  $sticky = \Drupal::service('user.data')->get('sticky_toolbar', $user, 'sticky');
 
   // Only attach library if user set sticky toggle to false.
   if (!$sticky) {
