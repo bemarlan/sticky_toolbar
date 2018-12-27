@@ -1,11 +1,11 @@
 CONTENTS OF THIS FILE
 ---------------------
 
-* Introduction
-* Requirements
-* Installation
-* Configuration
-* Maintainers
+ * Introduction
+ * Requirements
+ * Installation
+ * Configuration
+ * Maintainers
 
 
 INTRODUCTION
@@ -49,7 +49,7 @@ CONFIGURATION
        setting page will be empty unless this permission is granted.
 
     3. To toggle the settings, navigate to
-    Administration > Configuration > User interface > Sticky Toolbar settings.
+       Administration > Configuration > User interface > Sticky Toolbar settings.
 
 
 MAINTAINERS

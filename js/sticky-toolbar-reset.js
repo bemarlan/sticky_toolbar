@@ -9,10 +9,11 @@
 
   Drupal.behaviors.sticky_toolbar_reset = {
     attach: function () {
+      var $toolbar_height = $('#toolbar-administration').height();
       $('body').removeClass('toolbar-fixed');
-      $('body').removeClass('toolbar-tray-open');
-      $('body').css('padding-top', '40px');
-      $('.toolbar-tray').removeClass('is-active');
+      if ($toolbar_height) {
+        $('body').css('padding-top', $toolbar_height + 'px');
+      }
     }
   };
 
