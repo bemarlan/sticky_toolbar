@@ -7,6 +7,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Asset\CssCollectionOptimizer;
 use Drupal\Core\Asset\JsCollectionOptimizer;
+use Drupal\Core\Messenger\Messenger;
 use Drupal\user\UserDataInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -14,6 +15,13 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * Configures Sticky Toolbar settings for this user.
  */
 class SettingsForm extends FormBase {
+
+  /**
+   * Message type default.
+   *
+   * Can be status/warning/error.
+   */
+  const DISPLAY_MESSAGE_TYPE_DEFAULT = 'status';
 
   /**
    * Current user's data.
@@ -44,6 +52,13 @@ class SettingsForm extends FormBase {
   protected $cachedJs;
 
   /**
+   * Messenger.
+   *
+   * @var Drupal\Core\Messenger\Messenger
+   */
+  protected $messenger;
+
+  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
@@ -51,7 +66,8 @@ class SettingsForm extends FormBase {
       $container->get('user.data'),
       $container->get('current_user'),
       $container->get('asset.css.collection_optimizer'),
-      $container->get('asset.js.collection_optimizer')
+      $container->get('asset.js.collection_optimizer'),
+      $container->get('messenger')
     );
   }
 
@@ -66,12 +82,15 @@ class SettingsForm extends FormBase {
    *   Cached css files.
    * @param Drupal\Core\Asset\JsCollectionOptimizer $cachedJs
    *   Cached js files.
+   * @param Drupal\Core\Messenger\Messenger $messenger
+   *   Messenger.
    */
-  public function __construct(UserDataInterface $userData, AccountInterface $account, CssCollectionOptimizer $cachedCss, JsCollectionOptimizer $cachedJs) {
+  public function __construct(UserDataInterface $userData, AccountInterface $account, CssCollectionOptimizer $cachedCss, JsCollectionOptimizer $cachedJs, Messenger $messenger) {
     $this->userData = $userData;
     $this->user = $account;
     $this->cachedCss = $cachedCss;
     $this->cachedJs = $cachedJs;
+    $this->messenger = $messenger;
   }
 
   /**
@@ -106,7 +125,7 @@ class SettingsForm extends FormBase {
    *
    * @todo Add error handling.
    */
-  public function submitForm(array &$form, FormStateInterface $form_state) {
+  public function submitForm(array &$form, FormStateInterface $form_state, $displayMessageType = self::DISPLAY_MESSAGE_TYPE_DEFAULT) {
     $sticky = $form_state->getValue('is_sticky');
 
     if (is_int($sticky)) {
@@ -115,7 +134,7 @@ class SettingsForm extends FormBase {
 
     $form_state->setRedirect('sticky_toolbar.admin_settings');
     $message = 'Your toolbar settings have been updated.';
-    drupal_set_message($message);
+    $this->messenger->addMessage($this->t($message), $displayMessageType);
   }
 
   /**
